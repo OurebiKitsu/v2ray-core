@@ -30,7 +30,7 @@ func (c RootConfig) BuildV5(ctx context.Context) (proto.Message, error) {
 	if c.LogConfig != nil {
 		logConfMsgUnpacked, err := loadHeterogeneousConfigFromRawJSON("service", "log", c.LogConfig)
 		if err != nil {
-			return nil, err
+			return nil, newError("failed to parse Log config").Base(err)
 		}
 		logConfMsg = serial.ToTypedMessage(logConfMsgUnpacked)
 	} else {
@@ -43,7 +43,7 @@ func (c RootConfig) BuildV5(ctx context.Context) (proto.Message, error) {
 	if c.RouterConfig != nil {
 		routerConfig, err := loadHeterogeneousConfigFromRawJSON("service", "router", c.RouterConfig)
 		if err != nil {
-			return nil, err
+			return nil, newError("failed to parse Router config").Base(err)
 		}
 		config.App = append(config.App, serial.ToTypedMessage(routerConfig))
 	}
